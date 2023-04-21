@@ -23,8 +23,10 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorMapper authorMapper;
 
     @Autowired
-    public AuthorServiceImpl(BaseRepository<AuthorModel, Long> authorRepository, BaseRepository<NewsModel, Long> newsRepository,
-                             NewsValidator authorValidator, AuthorMapper authorMapper) {
+    public AuthorServiceImpl(BaseRepository<AuthorModel, Long> authorRepository,
+                             BaseRepository<NewsModel, Long> newsRepository,
+                             NewsValidator authorValidator,
+                             AuthorMapper authorMapper) {
         this.authorRepository = authorRepository;
         this.newsRepository = newsRepository;
         this.validator = authorValidator;
@@ -40,9 +42,7 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorDtoResponse readById(Long id) {
         validator.validateId(id);
         Optional<AuthorModel> maybeNullModel = authorRepository.readById(id);
-        if (maybeNullModel.isEmpty()) {
-            throw new ServiceException(String.format(Error.AUTHOR_DOES_NOT_EXIST.toString(), id));
-        }
+        if (maybeNullModel.isEmpty()) throw new ServiceException(String.format(Error.AUTHOR_DOES_NOT_EXIST.toString(), id));
         return authorMapper.modelToDtoResponse(maybeNullModel.get());
     }
 
@@ -65,9 +65,7 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorDtoResponse getAuthorByNewsId(Long id) {
         validator.validateId(id);
         Optional<NewsModel> maybeNullNews = newsRepository.readById(id);
-        if (maybeNullNews.isEmpty()) {
-            throw new ServiceException(String.format(Error.NEWS_DOES_NOT_EXIST.toString(), id));
-        }
+        if (maybeNullNews.isEmpty()) throw new ServiceException(String.format(Error.NEWS_DOES_NOT_EXIST.toString(), id));
         return authorMapper.modelToDtoResponse(maybeNullNews.get().getAuthor());
     }
 
@@ -79,8 +77,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     private void authorExistsOrThrowException(Long id) {
-        if (!authorRepository.existById(id)) {
-            throw new ServiceException(String.format(Error.AUTHOR_DOES_NOT_EXIST.toString(), id));
-        }
+        if (!authorRepository.existById(id)) throw new ServiceException(String.format(Error.AUTHOR_DOES_NOT_EXIST.toString(), id));
     }
 }

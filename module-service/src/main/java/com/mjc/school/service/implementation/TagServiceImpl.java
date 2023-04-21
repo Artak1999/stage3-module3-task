@@ -25,8 +25,10 @@ public class TagServiceImpl implements TagService {
     private final NewsValidator validator;
     private final TagMapper tagMapper;
 
-    public TagServiceImpl(BaseRepository<TagModel, Long> tagRepository, BaseRepository<NewsModel, Long> newsRepository,
-                          NewsValidator validator, TagMapper tagMapper) {
+    public TagServiceImpl(BaseRepository<TagModel, Long> tagRepository,
+                          BaseRepository<NewsModel, Long> newsRepository,
+                          NewsValidator validator,
+                          TagMapper tagMapper) {
         this.tagRepository = tagRepository;
         this.newsRepository = newsRepository;
         this.validator = validator;
@@ -42,9 +44,7 @@ public class TagServiceImpl implements TagService {
     public TagDtoResponse readById(Long id) {
         validator.validateId(id);
         Optional<TagModel> maybeNullModel = tagRepository.readById(id);
-        if (maybeNullModel.isEmpty()) {
-            throw new ValidatorException(String.format(Error.TAG_DOES_NOT_EXIST.toString(), id));
-        }
+        if (maybeNullModel.isEmpty()) throw new ValidatorException(String.format(Error.TAG_DOES_NOT_EXIST.toString(), id));
         return tagMapper.modelToDtoResponse(maybeNullModel.get());
     }
 
@@ -72,15 +72,11 @@ public class TagServiceImpl implements TagService {
     public List<TagDtoResponse> getTagsByNewsId(Long id) {
         validator.validateId(id);
         Optional<NewsModel> maybeNullNews = newsRepository.readById(id);
-        if (maybeNullNews.isEmpty()) {
-            throw new ServiceException(String.format(Error.NEWS_DOES_NOT_EXIST.toString(), id));
-        }
+        if (maybeNullNews.isEmpty()) throw new ServiceException(String.format(Error.NEWS_DOES_NOT_EXIST.toString(), id));
         return tagMapper.listOfModelsToListOfResponses(maybeNullNews.get().getTag());
     }
 
     private void tagExistsOrThrowException(Long id) {
-        if (!tagRepository.existById(id)) {
-            throw new ServiceException(String.format(Error.TAG_DOES_NOT_EXIST.toString(), id));
-        }
+        if (!tagRepository.existById(id)) throw new ServiceException(String.format(Error.TAG_DOES_NOT_EXIST.toString(), id));
     }
 }

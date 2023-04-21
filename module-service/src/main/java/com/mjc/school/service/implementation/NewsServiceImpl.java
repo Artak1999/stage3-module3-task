@@ -47,9 +47,7 @@ public class NewsServiceImpl implements NewsService {
     public NewsDtoResponse readById(Long id) {
         validator.validateId(id);
         Optional<NewsModel> maybeNullModel = newsRepository.readById(id);
-        if (maybeNullModel.isEmpty()) {
-            throw new ServiceException(String.format(Error.NEWS_DOES_NOT_EXIST.toString(), id));
-        }
+        if (maybeNullModel.isEmpty()) throw new ServiceException(String.format(Error.NEWS_DOES_NOT_EXIST.toString(), id));
         return modelToDtoResponse(maybeNullModel.get());
     }
 
@@ -79,9 +77,13 @@ public class NewsServiceImpl implements NewsService {
         return newsRepository.deleteById(id);
     }
 
-    public List<NewsDtoResponse> getNewsByCriteria(List<String> tagNames, List<Long> tagIds,
-                                                   String authorName, String title, String content) {
-        List<NewsModel> newsModels = newsRepository.readAll()
+    public List<NewsDtoResponse> getNewsByCriteria(List<String> tagNames,
+                                                   List<Long> tagIds,
+                                                   String authorName,
+                                                   String title,
+                                                   String content) {
+        List<NewsModel> newsModels = newsRepository.
+                readAll()
                 .stream()
                 .filter(allNotNullParameterPredicate(tagNames, tagIds, authorName, title, content))
                 .toList();
@@ -98,44 +100,29 @@ public class NewsServiceImpl implements NewsService {
         return null;
     }
 
-    private Predicate<NewsModel> allNotNullParameterPredicate(List<String> tagNames, List<Long> tagIds,
-                                                              String authorName, String title, String content) {
+    private Predicate<NewsModel> allNotNullParameterPredicate(List<String> tagNames,
+                                                              List<Long> tagIds,
+                                                              String authorName,
+                                                              String title,
+                                                              String content) {
         Predicate<NewsModel> newsPredicate = news -> true;
-        if (tagNames != null && !tagNames.isEmpty()) {
-            newsPredicate = newsPredicate.and(news -> new HashSet<>(news.getTag().stream().map(TagModel::getName).toList()).containsAll(tagNames));
-        }
-        if (tagIds != null && !tagIds.isEmpty()) {
-            newsPredicate = newsPredicate.and(news -> new HashSet<>(news.getTag().stream().map(TagModel::getId).toList()).containsAll(tagIds));
-        }
-        if (authorName != null && !authorName.isBlank()) {
-            newsPredicate = newsPredicate.and(news -> news.getAuthor().getName().equalsIgnoreCase(authorName));
-        }
-        if (title != null && !title.isBlank()) {
-            newsPredicate = newsPredicate.and(news -> news.getTitle().toLowerCase().contains(title.toLowerCase()));
-        }
-        if (content != null && !content.isBlank()) {
-            newsPredicate = newsPredicate.and(news -> news.getContent().toLowerCase().contains(content.toLowerCase()));
-        }
+        if (tagNames != null && !tagNames.isEmpty()) newsPredicate = newsPredicate.and(news -> new HashSet<>(news.getTag().stream().map(TagModel::getName).toList()).containsAll(tagNames));
+        if (tagIds != null && !tagIds.isEmpty()) newsPredicate = newsPredicate.and(news -> new HashSet<>(news.getTag().stream().map(TagModel::getId).toList()).containsAll(tagIds));
+        if (authorName != null && !authorName.isBlank()) newsPredicate = newsPredicate.and(news -> news.getAuthor().getName().equalsIgnoreCase(authorName));
+        if (title != null && !title.isBlank()) newsPredicate = newsPredicate.and(news -> news.getTitle().toLowerCase().contains(title.toLowerCase()));
+        if (content != null && !content.isBlank()) newsPredicate = newsPredicate.and(news -> news.getContent().toLowerCase().contains(content.toLowerCase()));
         return newsPredicate;
     }
 
     private void authorExistsOrThrowException(Long id) {
-        if (!authorRepository.existById(id)) {
-            throw new ServiceException(String.format(Error.AUTHOR_DOES_NOT_EXIST.toString(), id));
-        }
+        if (!authorRepository.existById(id)) throw new ServiceException(String.format(Error.AUTHOR_DOES_NOT_EXIST.toString(), id));
     }
 
     private void newsExistsOrThrowException(Long id) {
-        if (!newsRepository.existById(id)) {
-            throw new ServiceException(String.format(Error.NEWS_DOES_NOT_EXIST.toString(), id));
-        }
+        if (!newsRepository.existById(id)) throw new ServiceException(String.format(Error.NEWS_DOES_NOT_EXIST.toString(), id));
     }
 
     private void tagsExistOrThrowException(List<Long> ids) {
-        ids.forEach(id -> {
-            if (!tagRepository.existById(id)) {
-                throw new ServiceException(String.format(Error.TAG_DOES_NOT_EXIST.toString(), id));
-            }
-        });
+        ids.forEach(id -> { if (!tagRepository.existById(id)) throw new ServiceException(String.format(Error.TAG_DOES_NOT_EXIST.toString(), id));});
     }
 }
