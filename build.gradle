@@ -20,13 +20,13 @@ subprojects {
 
     dependencies {
         implementation "org.springframework:spring-context:$springVersion"
-
         implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springBootJpa"
         implementation "mysql:mysql-connector-java:$mysqlVersion"
         implementation "javax.xml.bind:jaxb-api:$javaxXmlBindVersion"
         implementation "jakarta.xml.bind:jakarta.xml.bind-api:$jakartaXmlBindVersion"
         implementation "org.glassfish.jaxb:jaxb-runtime:$glassfishJaxbVersion"
 
+        testImplementation "org.assertj:assertj-core:$assertJVersion"
         testImplementation "org.springframework:spring-test:$springVersion"
         testImplementation "org.junit.jupiter:junit-jupiter-api:$jupiterVersion"
         testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiterVersion"
