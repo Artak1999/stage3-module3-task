@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public class NewsRepository implements BaseRepository<NewsModel,Long> {
 
-    EntityManager entityManager = null;
+    EntityManager entityManager;
 
     @Override
     @SuppressWarnings("unchecked")

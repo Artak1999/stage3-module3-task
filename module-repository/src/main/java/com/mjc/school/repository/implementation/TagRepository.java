@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public class TagRepository implements BaseRepository<TagModel,Long> {
 
-    EntityManager entityManager = null;
+    EntityManager entityManager;
 
     @Override
     @SuppressWarnings("unchecked")

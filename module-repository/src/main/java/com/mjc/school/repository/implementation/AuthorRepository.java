@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public class AuthorRepository implements BaseRepository<AuthorModel,Long> {
 
-    EntityManager entityManager = null;
+    EntityManager entityManager;
 
     @Override
     @SuppressWarnings({"unchecked"})
