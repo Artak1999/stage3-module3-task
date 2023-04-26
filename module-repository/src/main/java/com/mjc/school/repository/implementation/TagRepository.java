@@ -2,6 +2,7 @@ package com.mjc.school.repository.implementation;
 
 import com.mjc.school.repository.BaseRepository;
 import com.mjc.school.repository.model.implementation.TagModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,7 +12,12 @@ import java.util.Optional;
 @Repository
 public class TagRepository implements BaseRepository<TagModel,Long> {
 
-    EntityManager entityManager;
+    private final EntityManager entityManager;
+
+    @Autowired
+    public TagRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     @SuppressWarnings("unchecked")

@@ -3,6 +3,7 @@ package com.mjc.school.repository.implementation;
 import com.mjc.school.repository.BaseRepository;
 import com.mjc.school.repository.OnDelete;
 import com.mjc.school.repository.model.implementation.AuthorModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -12,7 +13,11 @@ import java.util.Optional;
 @Repository
 public class AuthorRepository implements BaseRepository<AuthorModel,Long> {
 
-    EntityManager entityManager;
+    private final EntityManager entityManager;
+    @Autowired
+    public AuthorRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     @SuppressWarnings({"unchecked"})
