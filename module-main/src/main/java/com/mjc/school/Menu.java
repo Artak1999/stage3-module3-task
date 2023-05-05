@@ -163,12 +163,7 @@ public class Menu {
             if(method.isPresent())
                 break;
         }
-        return method.stream().filter(a -> a.invoke(controllers, commandFactory.getAllCommands.stream().filter(b -> b == number)));
-    }
-
-    public int[] findArgs(){
-        Map<Integer,Integer> map = new HashMap<>();
-        return new int[0];
+        return method;
     }
 
     public long readId(Scanner scanner) {
