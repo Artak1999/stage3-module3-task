@@ -20,7 +20,7 @@ public class NewsRepository implements BaseRepository<NewsModel,Long> {
     @Override
     @SuppressWarnings("unchecked")
     public List<NewsModel> readAll() {
-        return entityManager.createQuery("Select all From NewsModel all").getResultList();
+        return entityManager.createQuery("Select a From NewsModel a").getResultList();
     }
 
     @Override
