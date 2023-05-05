@@ -24,9 +24,7 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
 
     @Override
     @CommandHandler(operation = 1)
-    public NewsDtoResponse create(NewsDtoRequest createRequest) {
-        return newsService.create(createRequest);
-    }
+    public NewsDtoResponse create(NewsDtoRequest createRequest) {return newsService.create(createRequest);}
 
     @Override
     @CommandHandler(operation = 4)
@@ -53,8 +51,7 @@ public class NewsController implements BaseController<NewsDtoRequest, NewsDtoRes
     }
 
     @CommandHandler(operation = 18)
-    public List<NewsDtoResponse> getNewsByCriteria(List<String> tagNames, List<Long> tagIds, String authorName,
-                                                   String title, String content) {
+    public List<NewsDtoResponse> getNewsByTagNames(List<String> tagNames, List<Long> tagIds, String authorName, String title, String content) {
         return newsServices.getNewsByCriteria(tagNames, tagIds, authorName, title, content);
     }
 }

@@ -1,17 +1,18 @@
 package com.mjc.school;
 
+import com.mjc.school.controller.command.Command;
 import com.mjc.school.controller.command.CommandHandler;
 import com.mjc.school.controller.commands.CommandFactory;
+import com.mjc.school.controller.implementation.AuthorController;
+import com.mjc.school.controller.implementation.NewsController;
+import com.mjc.school.controller.implementation.TagController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Component
@@ -151,19 +152,23 @@ public class Menu {
         }
     }
 
-    private void findMethod(int number){
-        Method[] menuMethods = Controller.class.getDeclaredMethods();
-        Method result = null;
-        for (int i = 0; i < menuMethods.length; i++) {
-            Stream<Method> str = Arrays.stream(menuMethods)
+    private Optional<Method> findMethod(int number){
+        List<Class<?>> controllers = Arrays.asList(AuthorController.class, NewsController.class, TagController.class);
+        Optional<Method> method = Optional.empty();
+        for (Class<?> o : controllers) {
+            method = Stream.of(o.getDeclaredMethods())
                     .filter(a -> a.isAnnotationPresent(CommandHandler.class))
-                    .filter(a -> a.getAnnotation(CommandHandler.class).operation() == number);
-            try {
-                result.invoke(menuMethods, str);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException(e);
-            }
+                    .filter(a -> a.getAnnotation(CommandHandler.class).operation() == number)
+                    .findFirst();
+            if(method.isPresent())
+                break;
         }
+        return method.stream().filter(a -> a.invoke(controllers, commandFactory.getAllCommands.stream().filter(b -> b == number)));
+    }
+
+    public int[] findArgs(){
+        Map<Integer,Integer> map = new HashMap<>();
+        return new int[0];
     }
 
     public long readId(Scanner scanner) {

@@ -32,6 +32,8 @@ subprojects {
         testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiterVersion"
         testImplementation "com.tngtech.archunit:archunit-junit5-api:$archUnitVersion"
         testImplementation "com.h2database:h2:$h2Version"
+        compileOnly "org.projectlombok:lombok:$lombok"
+
     }
     test {
         useJUnitPlatform()

@@ -49,6 +49,10 @@ public class NewsDtoRequest {
         this.authorId = authorId;
     }
 
+    public List<Long> getTagIds() {
+        return tagIds;
+    }
+
     @Override
     public String toString() {
         return "NewsDtoRequest{" +
@@ -57,9 +61,5 @@ public class NewsDtoRequest {
                 ", content='" + content + '\'' +
                 ", authorId=" + authorId +
                 '}';
-    }
-
-    public List<Long> getTagIds() {
-        return tagIds;
     }
 }
